@@ -14,19 +14,16 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Install AutoPkg
-      id: install_autopkg
+    - id: install_autopkg
       run: |
         curl -L ${{ inputs.autopkg_version }} --output /tmp/autopkg.pkg
         sudo installer -pkg /tmp/autopkg.pkg -target /
       shell: bash
-    - name: Configure AutoPkg and Git
-      id: configure_autopkg
+    - id: configure_autopkg
       run: |
         defaults write com.github.autopkg RECIPE_REPO_DIR "$(pwd)"
         defaults write com.github.autopkg FAIL_RECIPES_WITHOUT_TRUST_INFO -bool NO
-    - name: Run AutoPkg
-      id: run_autopkg
+    - id: run_autopkg
       run: |
         find ./ -type f -name "*.recipe" -exec bash -c 'autopkg run '{} \;
       shell: bash
